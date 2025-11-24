@@ -1,0 +1,209 @@
+{
+  "name": "brand_workflow",
+  "description": "Complete brand and content workflow from knowledge ingestion to content scheduling",
+  "version": "1.0",
+  "agents": [
+    {
+      "name": "knowledge_agent",
+      "description": "Ingests uploaded documents, runs chunking, and stores embeddings in vector storage",
+      "tools": ["embedder", "file_storage"],
+      "output_schema": {
+        "vector_index_id": "string",
+        "knowledge_catalog": "object",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "industry_dna_agent",
+      "description": "Researches industry norms, tone, colors, and content cadence using web scout and knowledge base",
+      "tools": ["web_scout", "memory"],
+      "output_schema": {
+        "industry_snapshot": "object",
+        "tone_recommendations": "array",
+        "color_hints": "array",
+        "content_cadence": "string",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "brand_brain",
+      "description": "Assembles brand profile from intake questions and industry snapshot",
+      "tools": ["memory", "artifact_generator"],
+      "output_schema": {
+        "brand_tone": "string",
+        "brand_messaging": "string",
+        "content_pillars": "array",
+        "brand_values": "array",
+        "unique_selling_proposition": "string",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "identity_crafter",
+      "description": "Generates visual identity recommendations including logos, color palettes, typography",
+      "tools": ["artifact_generator", "image_gen"],
+      "output_schema": {
+        "logo_options": "array",
+        "color_palette": "array",
+        "typography": "array",
+        "design_guidelines": "object",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "strategy_agent",
+      "description": "Produces content strategy document and 30-day content calendar with decision point for safe/bold approach",
+      "tools": ["artifact_generator", "memory"],
+      "output_schema": {
+        "content_strategy": "object",
+        "content_calendar": "object",
+        "strategy_options": "array",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "social_media_brain",
+      "description": "Creates platform-specific social media strategies, posting schedules, and engagement optimization",
+      "tools": ["web_scout", "memory"],
+      "output_schema": {
+        "platform_strategies": "object",
+        "posting_schedule": "object",
+        "engagement_recommendations": "array",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "writer_agent",
+      "description": "Generates long-form content (articles, scripts) using retrieval from vector store and brand profile",
+      "tools": ["memory", "embedder", "artifact_generator"],
+      "output_schema": {
+        "longform_content": "array",
+        "assets_list": "array",
+        "seo_metadata": "object",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "repurpose_agent",
+      "description": "Transforms long-form content into platform-specific short-form posts",
+      "tools": ["memory", "artifact_generator"],
+      "output_schema": {
+        "shortform_content": "array",
+        "platform_adaptations": "object",
+        "hashtag_recommendations": "object",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "competitor_engine",
+      "description": "Analyzes competitors and market trends to identify opportunities",
+      "tools": ["web_scout", "crawler", "memory"],
+      "output_schema": {
+        "competitor_summary": "object",
+        "market_trends": "array",
+        "opportunities": "array",
+        "threat_analysis": "object",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "scheduler_agent",
+      "description": "Creates content publishing schedule entries without executing external API calls",
+      "tools": ["memory"],
+      "output_schema": {
+        "schedule_entries": "array",
+        "optimal_times": "object",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "content_strategist",
+      "description": "Develops comprehensive content strategies based on brand profile and market analysis",
+      "tools": ["memory", "artifact_generator"],
+      "output_schema": {
+        "strategy_document": "object",
+        "content_themes": "array",
+        "kpis": "object",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "tone_voice_engine",
+      "description": "Analyzes and defines brand tone of voice guidelines",
+      "tools": ["memory", "web_scout"],
+      "output_schema": {
+        "tone_guide": "object",
+        "voice_examples": "array",
+        "dos_and_donts": "object",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "visual_style_engine",
+      "description": "Creates visual style guides and design systems",
+      "tools": ["artifact_generator", "image_gen"],
+      "output_schema": {
+        "style_guide": "object",
+        "visual_examples": "array",
+        "brand_assets": "array",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "monetization_advisor",
+      "description": "Provides monetization strategy recommendations",
+      "tools": ["memory", "web_scout"],
+      "output_schema": {
+        "monetization_strategies": "array",
+        "revenue_projections": "object",
+        "implementation_roadmap": "array",
+        "confidence_score": "number",
+        "provenance": "string"
+      }
+    },
+    {
+      "name": "output_passer_agent",
+      "description": "Universal logger that receives all agent events and persists to database",
+      "tools": [],
+      "output_schema": {
+        "log_id": "string",
+        "status": "string"
+      }
+    },
+    {
+      "name": "qa_agent",
+      "description": "Performs quality assurance checks on generated content",
+      "tools": [],
+      "output_schema": {
+        "pass": "boolean",
+        "issues": "array",
+        "recommendations": "array",
+        "confidence_score": "number"
+      }
+    },
+    {
+      "name": "code_review_agent",
+      "description": "Reviews generated artifacts for quality, consistency, and brand alignment",
+      "tools": ["memory"],
+      "output_schema": {
+        "approved": "boolean",
+        "feedback": "array",
+        "revision_suggestions": "array",
+        "confidence_score": "number"
+      }
+    }
+  ]
+}

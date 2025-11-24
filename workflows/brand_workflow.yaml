@@ -1,0 +1,131 @@
+name: Brand Workflow
+description: Complete brand and content workflow from knowledge ingestion to content scheduling
+version: "1.0"
+
+nodes:
+  - id: knowledge_ingest
+    name: Knowledge Ingestion
+    agentId: knowledge_agent
+    dependencies: []
+    requiresApproval: false
+    runQA: true
+    runCodeReview: false
+    retryPolicy:
+      maxRetries: 2
+      backoffMs: 1000
+
+  - id: industry_research
+    name: Industry DNA Research
+    agentId: industry_dna_agent
+    dependencies: [knowledge_ingest]
+    requiresApproval: false
+    runQA: true
+    runCodeReview: false
+    retryPolicy:
+      maxRetries: 2
+      backoffMs: 1000
+
+  - id: brand_profile
+    name: Brand Profile Assembly
+    agentId: brand_brain
+    dependencies: [knowledge_ingest, industry_research]
+    requiresApproval: false
+    runQA: true
+    runCodeReview: true
+    retryPolicy:
+      maxRetries: 2
+      backoffMs: 1000
+
+  - id: visual_identity
+    name: Visual Identity Creation
+    agentId: identity_crafter
+    dependencies: [brand_profile]
+    requiresApproval: false
+    runQA: true
+    runCodeReview: true
+    retryPolicy:
+      maxRetries: 2
+      backoffMs: 1000
+
+  - id: content_strategy
+    name: Content Strategy Development
+    agentId: strategy_agent
+    dependencies: [brand_profile, industry_research]
+    requiresApproval: true  # Decision point: safe vs bold strategy
+    runQA: true
+    runCodeReview: true
+    retryPolicy:
+      maxRetries: 2
+      backoffMs: 1000
+
+  - id: tone_voice
+    name: Tone & Voice Definition
+    agentId: tone_voice_engine
+    dependencies: [brand_profile]
+    requiresApproval: false
+    runQA: true
+    runCodeReview: true
+
+  - id: competitor_analysis
+    name: Competitor Analysis
+    agentId: competitor_analysis  # Using dedicated CompetitorAnalysisAgent
+    dependencies: [industry_research]
+    description: Deep competitor analysis with strategic recommendations
+    retryPolicy:
+      maxRetries: 2
+      backoffMs: 1000
+    runQA: true
+
+  - id: longform_content
+    name: Long-form Content Generation
+    agentId: writer_agent
+    dependencies: [content_strategy, tone_voice]
+    requiresApproval: false
+    runQA: true
+    runCodeReview: true
+    retryPolicy:
+      maxRetries: 2
+      backoffMs: 1000
+
+  - id: shortform_content
+    name: Short-form Content Repurposing
+    agentId: repurpose_agent
+    dependencies: [longform_content]
+    requiresApproval: false
+    runQA: true
+    runCodeReview: true
+    retryPolicy:
+      maxRetries: 2
+      backoffMs: 1000
+
+  - id: social_strategy
+    name: Social Media Strategy
+    agentId: social_media_brain
+    dependencies: [content_strategy, competitor_analysis]
+    requiresApproval: false
+    runQA: true
+    runCodeReview: true
+
+  - id: content_schedule
+    name: Content Scheduling
+    agentId: scheduler_agent
+    dependencies: [shortform_content, social_strategy]
+    requiresApproval: true  # Requires approval before publishing
+    runQA: true
+    runCodeReview: false
+    retryPolicy:
+      maxRetries: 2
+      backoffMs: 1000
+
+  - id: output_logging
+    name: Output Logging & Completion
+    agentId: output_passer_agent
+    dependencies: [content_schedule]
+    requiresApproval: false
+    runQA: false
+    runCodeReview: false
+
+metadata:
+  estimatedDuration: "15-30 minutes"
+  complexity: "high"
+  requiresHumanInput: true
