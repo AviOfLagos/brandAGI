@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useChat } from 'ai/react'; // Vercel AI SDK hook
 import Link from 'next/link';
 import { ActivityFeed } from '@/app/components/ActivityFeed';
+import { ArtifactsDisplay } from '@/app/components/ArtifactsDisplay';
 
 interface ProjectDashboardProps {
   project: any;
@@ -12,6 +13,7 @@ interface ProjectDashboardProps {
 export function ProjectDashboard({ project }: ProjectDashboardProps) {
   const [isStartingWorkflow, setIsStartingWorkflow] = useState(false);
   const [workflowState, setWorkflowState] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<'activity' | 'artifacts'>('activity');
 
   // Vercel AI SDK useChat hook
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
@@ -222,11 +224,44 @@ export function ProjectDashboard({ project }: ProjectDashboardProps) {
             )}
 
             {/* Activity Feed */}
-            <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-              <ActivityFeed 
-                projectId={project.id} 
-                refreshInterval={15000} // Poll every 15 seconds
-              />
+            <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+              {/* Tabs */}
+              <div className="border-b border-gray-200 dark:border-gray-700">
+                <nav className="flex -mb-px">
+                  <button
+                    onClick={() => setActiveTab('activity')}
+                    className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+                      activeTab === 'activity'
+                        ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                    }`}
+                  >
+                    📊 Activity Feed
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('artifacts')}
+                    className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+                      activeTab === 'artifacts'
+                        ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                    }`}
+                  >
+                    📦 Artifacts
+                  </button>
+                </nav>
+              </div>
+
+              {/* Tab Content */}
+              <div className="p-6">
+                {activeTab === 'activity' ? (
+                  <ActivityFeed 
+                    projectId={project.id} 
+                    refreshInterval={15000} // Poll every 15 seconds
+                  />
+                ) : (
+                  <ArtifactsDisplay projectId={project.id} />
+                )}
+              </div>
             </div>
           </div>
 
